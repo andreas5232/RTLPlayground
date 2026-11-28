@@ -2999,6 +2999,9 @@ var ADVSEL = {
     1: "10m half"
 };
 
+// Map adv strings to dropdown values for forced speed detection
+var SPEED_MAP = {"2.5G":"2g5","1G":"1g","100M-FD":"100m full","100M-HD":"100m half","10M-FD":"10m full","10M-HD":"10m half"};
+
 function speedLabel(s) {
     if (s === "c_auto") return t("c_auto");
     return s.replace(" full", " " + t("c_full")).replace(" half", " " + t("c_half"));
@@ -3071,7 +3074,7 @@ function portsStatus() {
         if (mc) mc.textContent = parseInt(p.macs, 16) & 0x1fff;
         if (el) el.innerHTML = linkBadge(p);
         var sel = $("pspd" + i),
-            v = p.isSFP ? 0 : ADVSEL[parseInt(p.adv, 2)];
+            v = p.isSFP ? 0 : (p.adv && p.adv.length === 1 ? SPEED_MAP[p.adv[0]] : "auto");
         if (sel && v && document.activeElement !== sel) sel.value = v;
     });
 }
